@@ -1,3 +1,14 @@
+<div align="center">
+
+<img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200"/>
+
+### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
+
+**Arquitectura y Testing de Backend con Agentes de IA**
+
+</div>
+
+
 # Backend Template
 
 [![Node.js](https://img.shields.io/badge/Node.js-24-339933.svg)](https://nodejs.org/)
@@ -5,6 +16,8 @@
 [![Express](https://img.shields.io/badge/Express-5-000000.svg)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248.svg)](https://www.mongodb.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 
 Production-ready backend template with hexagonal architecture.
 
@@ -69,13 +82,6 @@ module/tests/
 └── e2e/            # HTTP endpoint tests (full stack)
 ```
 
-<div align="center">
+## License
 
-<img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200"/>
-
-### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
-
-**Arquitectura y Testing de Backend con Agentes de IA**
-
-</div>
-
+MIT

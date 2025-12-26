@@ -3,7 +3,6 @@
 <img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200" height="400"/>
 
 ### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
-#### El código importa, pero el contexto más
 </div>
 
 

@@ -1,11 +1,9 @@
 <div align="center">
 
-<img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200"/>
+<img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200" height="400"/>
 
 ### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
-
-**Arquitectura y Testing de Backend con Agentes de IA**
-
+## El código importa, pero el contexto más
 </div>
 
 

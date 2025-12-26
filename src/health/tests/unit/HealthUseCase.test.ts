@@ -20,7 +20,7 @@ describe('The HealthUseCase', () => {
     await useCase.execute();
 
     const saved = await repository.find();
-    expect(saved).toBeDefined();
+    expect(saved.isSome()).toBe(true);
   });
 
   it('tracks uptime from the first check', async () => {

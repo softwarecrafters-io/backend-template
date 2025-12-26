@@ -26,14 +26,14 @@ describe('The MongoHealthRepository', () => {
     await repository.save(health);
     const retrieved = await repository.find();
 
-    expect(retrieved).toBeDefined();
-    expect(retrieved?.toPrimitives().id).toBe(id.value);
+    expect(retrieved.isSome()).toBe(true);
+    expect(retrieved.getOrThrow(new Error('Not found')).toPrimitives().id).toBe(id.value);
   });
 
   it('finds nothing when empty', async () => {
     const retrieved = await repository.find();
 
-    expect(retrieved).toBeUndefined();
+    expect(retrieved.isNone()).toBe(true);
   });
 
   it('maintains a single record across saves', async () => {
@@ -45,7 +45,7 @@ describe('The MongoHealthRepository', () => {
 
     const retrieved = await repository.find();
 
-    expect(retrieved?.toPrimitives().id).toBe(id.value);
+    expect(retrieved.getOrThrow(new Error('Not found')).toPrimitives().id).toBe(id.value);
   });
 
   it('preserves creation time across updates', async () => {
@@ -55,10 +55,11 @@ describe('The MongoHealthRepository', () => {
     await repository.save(health);
 
     const retrieved = await repository.find();
-    const primitives = retrieved?.toPrimitives();
+    const foundHealth = retrieved.getOrThrow(new Error('Not found'));
+    const primitives = foundHealth.toPrimitives();
 
-    expect(primitives?.createdAt).toBe(jan1At10am.toISOString());
-    expect(primitives?.lastCheckedAt).toBe(jan1At10am5min.toISOString());
-    expect(retrieved?.uptime()).toBe(fiveMinutesInSeconds);
+    expect(primitives.createdAt).toBe(jan1At10am.toISOString());
+    expect(primitives.lastCheckedAt).toBe(jan1At10am5min.toISOString());
+    expect(foundHealth.uptime()).toBe(fiveMinutesInSeconds);
   });
 });

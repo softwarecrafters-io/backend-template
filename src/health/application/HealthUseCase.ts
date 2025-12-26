@@ -14,13 +14,14 @@ export class HealthUseCase {
 
   async execute(): Promise<HealthDto> {
     const now = new Date();
-    const existingHealth = await this.healthRepository.find();
-    if (existingHealth) {
-      existingHealth.update(now);
-      await this.healthRepository.save(existingHealth);
-      return this.toDto(existingHealth);
-    }
-    const health = Health.create(Id.generate(), now, now);
+    const maybeHealth = await this.healthRepository.find();
+    const health = maybeHealth.fold(
+      () => Health.create(Id.generate(), now, now),
+      (existing) => {
+        existing.update(now);
+        return existing;
+      },
+    );
     await this.healthRepository.save(health);
     return this.toDto(health);
   }

@@ -1,22 +1,23 @@
 import { Health } from '../entities/Health';
+import { Maybe } from '../../../shared/domain/Maybe';
 
 export interface HealthRepository {
   save(health: Health): Promise<void>;
-  find(): Promise<Health | undefined>;
+  find(): Promise<Maybe<Health>>;
 }
 
 export class InMemoryHealthRepository implements HealthRepository {
-  private health: Health | undefined;
+  private health: Maybe<Health>;
 
   constructor(initialHealth?: Health) {
-    this.health = initialHealth;
+    this.health = Maybe.fromNullable(initialHealth);
   }
 
   async save(health: Health): Promise<void> {
-    this.health = health;
+    this.health = Maybe.some(health);
   }
 
-  async find(): Promise<Health | undefined> {
+  async find(): Promise<Maybe<Health>> {
     return this.health;
   }
 }

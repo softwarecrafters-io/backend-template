@@ -2,6 +2,7 @@ import { Collection, Db } from 'mongodb';
 import { Health } from '../../domain/entities/Health';
 import { HealthRepository } from '../../domain/repositories/HealthRepository';
 import { Id } from '../../../shared/domain/value-objects/Id';
+import { Maybe } from '../../../shared/domain/Maybe';
 
 interface HealthDocument {
   _id: string;
@@ -21,12 +22,9 @@ export class MongoHealthRepository implements HealthRepository {
     await this.collection.updateOne({ _id: document._id }, { $set: document }, { upsert: true });
   }
 
-  async find(): Promise<Health | undefined> {
+  async find(): Promise<Maybe<Health>> {
     const document = await this.collection.findOne();
-    if (!document) {
-      return undefined;
-    }
-    return this.toDomain(document);
+    return Maybe.fromNullable(document).map((doc) => this.toDomain(doc));
   }
 
   private toDocument(health: Health): HealthDocument {

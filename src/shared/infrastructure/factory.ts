@@ -6,9 +6,8 @@ import { HealthController } from '../../health/infrastructure/http/HealthControl
 import { Logger } from '../application/ports/Logger';
 import { createPinoLogger } from './adapters/PinoLogger';
 
-let mongoClient: MongoClient | null;
-let healthRepository: HealthRepository | null;
-let logger: Logger | null;
+let healthRepository: HealthRepository;
+let logger: Logger;
 
 export function getLogger(): Logger {
   if (!logger) {
@@ -17,15 +16,12 @@ export function getLogger(): Logger {
   return logger;
 }
 
-export async function getMongoConnection(): Promise<MongoClient> {
-  if (!mongoClient) {
-    const mongoUri = process.env.MONGO_URI;
-    if (!mongoUri) {
-      throw new Error('MONGO_URI environment variable is required');
-    }
-    mongoClient = await MongoClient.connect(mongoUri);
+export async function connectToMongo(): Promise<MongoClient> {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error('MONGO_URI environment variable is required');
   }
-  return mongoClient;
+  return MongoClient.connect(mongoUri);
 }
 
 export function getHealthRepository(client: MongoClient): HealthRepository {
@@ -41,13 +37,5 @@ export function createHealthUseCase(client: MongoClient): HealthUseCase {
 
 export function createHealthController(client: MongoClient): HealthController {
   return new HealthController(createHealthUseCase(client), getLogger());
-}
-
-export async function closeConnections(): Promise<void> {
-  if (mongoClient) {
-    await mongoClient.close();
-    mongoClient = null;
-  }
-  healthRepository = null;
 }
 

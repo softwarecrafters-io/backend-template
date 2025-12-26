@@ -6,36 +6,47 @@ import { HealthController } from '../../health/infrastructure/http/HealthControl
 import { Logger } from '../application/ports/Logger';
 import { createPinoLogger } from './adapters/PinoLogger';
 
-let healthRepository: HealthRepository;
-let logger: Logger;
+export class Factory {
+  private static mongoClient: MongoClient;
+  private static healthRepository: HealthRepository;
+  private static logger: Logger;
 
-export function getLogger(): Logger {
-  if (!logger) {
-    logger = createPinoLogger();
+  static getLogger(): Logger {
+    if (!this.logger) {
+      this.logger = createPinoLogger();
+    }
+    return this.logger;
   }
-  return logger;
-}
 
-export async function connectToMongo(): Promise<MongoClient> {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) {
-    throw new Error('MONGO_URI environment variable is required');
+  static async connectToMongo(): Promise<void> {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+      throw new Error('MONGO_URI environment variable is required');
+    }
+    this.mongoClient = await MongoClient.connect(mongoUri);
   }
-  return MongoClient.connect(mongoUri);
-}
 
-export function getHealthRepository(client: MongoClient): HealthRepository {
-  if (!healthRepository) {
-    healthRepository = new MongoHealthRepository(client.db());
+  static async disconnectFromMongo(): Promise<void> {
+    await this.mongoClient.close();
   }
-  return healthRepository;
-}
 
-export function createHealthUseCase(client: MongoClient): HealthUseCase {
-  return new HealthUseCase(getHealthRepository(client));
-}
+  static setMongoClient(client: MongoClient): void {
+    this.mongoClient = client;
+  }
 
-export function createHealthController(client: MongoClient): HealthController {
-  return new HealthController(createHealthUseCase(client), getLogger());
+  private static getHealthRepository(): HealthRepository {
+    if (!this.healthRepository) {
+      this.healthRepository = new MongoHealthRepository(this.mongoClient.db());
+    }
+    return this.healthRepository;
+  }
+
+  static createHealthUseCase(): HealthUseCase {
+    return new HealthUseCase(this.getHealthRepository());
+  }
+
+  static createHealthController(): HealthController {
+    return new HealthController(this.createHealthUseCase(), this.getLogger());
+  }
 }
 

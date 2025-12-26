@@ -1,7 +1,7 @@
 import { MongoClient, Db } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-export async function createMongoClient() {
+export async function createTestMongo() {
   const server = await MongoMemoryServer.create();
   const client = await MongoClient.connect(server.getUri());
 

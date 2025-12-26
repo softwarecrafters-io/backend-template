@@ -1,15 +1,17 @@
 import request from 'supertest';
 import { createServer } from '../../../shared/infrastructure/server';
-import { createMongoClient } from '../../../shared/tests/testsFactory';
+import { Factory } from '../../../shared/infrastructure/factory';
+import { createTestMongo } from '../../../shared/tests/mongoTestHelper';
 import { Routes } from '../../../shared/infrastructure/routes';
 
 describe('GET /health', () => {
-  let mongo: Awaited<ReturnType<typeof createMongoClient>>;
+  let mongo: Awaited<ReturnType<typeof createTestMongo>>;
   let server: ReturnType<typeof createServer>;
 
   beforeAll(async () => {
-    mongo = await createMongoClient();
-    server = createServer(mongo.client());
+    mongo = await createTestMongo();
+    Factory.setMongoClient(mongo.client());
+    server = createServer();
   });
 
   afterAll(() => mongo.stop());

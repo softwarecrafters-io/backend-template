@@ -1,10 +1,10 @@
 import { MongoHealthRepository } from '../../infrastructure/adapters/MongoHealthRepository';
 import { Health } from '../../domain/entities/Health';
 import { Id } from '../../../shared/domain/value-objects/Id';
-import { createMongoClient } from '../../../shared/tests/testsFactory';
+import { createTestMongo } from '../../../shared/tests/mongoTestHelper';
 
 describe('The MongoHealthRepository', () => {
-  let mongo: Awaited<ReturnType<typeof createMongoClient>>;
+  let mongo: Awaited<ReturnType<typeof createTestMongo>>;
   let repository: MongoHealthRepository;
 
   const jan1At10am = new Date('2026-01-01T10:00:00.000Z');
@@ -12,7 +12,7 @@ describe('The MongoHealthRepository', () => {
   const fiveMinutesInSeconds = 300;
 
   beforeAll(async () => {
-    mongo = await createMongoClient();
+    mongo = await createTestMongo();
     repository = new MongoHealthRepository(mongo.db());
   });
 

@@ -2,21 +2,21 @@ import dotenv from 'dotenv';
 dotenv.config({ quiet: true });
 
 import { createServer } from './shared/infrastructure/server';
-import { connectToMongo, getLogger } from './shared/infrastructure/factory';
+import { Factory } from './shared/infrastructure/factory';
 
 async function main(): Promise<void> {
-  const logger = getLogger();
+  const logger = Factory.getLogger();
   const port = process.env.PORT || 3000;
   try {
-    const client = await connectToMongo();
+    await Factory.connectToMongo();
     logger.info('Connected to MongoDB');
-    const server = createServer(client);
+    const server = createServer();
     server.listen(port, () => {
       logger.info(`Server running on port ${port}`);
     });
     const shutdown = async () => {
       logger.info('Shutting down...');
-      await client.close();
+      await Factory.disconnectFromMongo();
       process.exit(0);
     };
     process.on('SIGTERM', shutdown);

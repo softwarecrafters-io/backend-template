@@ -1,9 +1,9 @@
 <div align="center">
+<br/>
 
 <img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200" />
 
 ### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
-<br/>
 <br/>
 </div>
 

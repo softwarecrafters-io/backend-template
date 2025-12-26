@@ -1,0 +1,36 @@
+import { Id } from '../../../shared/domain/value-objects/Id';
+import { DomainError } from '../../../shared/domain/DomainError';
+
+export class Health {
+  private constructor(
+    private readonly id: Id,
+    private readonly createdAt: Date,
+    private lastCheckedAt: Date
+  ) {}
+
+  static create(id: Id, createdAt: Date, lastCheckedAt: Date): Health {
+    if (lastCheckedAt < createdAt) {
+      throw DomainError.createValidation('lastCheckedAt cannot be before createdAt');
+    }
+    return new Health(id, createdAt, lastCheckedAt);
+  }
+
+  uptime(): number {
+    return (this.lastCheckedAt.getTime() - this.createdAt.getTime()) / 1000;
+  }
+
+  update(now: Date): void {
+    if (now < this.createdAt) {
+      throw DomainError.createValidation('lastCheckedAt cannot be before createdAt');
+    }
+    this.lastCheckedAt = now;
+  }
+
+  toPrimitives() {
+    return {
+      id: this.id.value,
+      createdAt: this.createdAt.toISOString(),
+      lastCheckedAt: this.lastCheckedAt.toISOString(),
+    };
+  }
+}

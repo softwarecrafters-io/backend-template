@@ -6,7 +6,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248.svg)](https://www.mongodb.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Production-ready backend template with hexagonal architecture, TDD, and clean code practices.
+Production-ready backend template with hexagonal architecture.
 
 ## Stack
 
@@ -69,6 +69,13 @@ module/tests/
 └── e2e/            # HTTP endpoint tests (full stack)
 ```
 
-## License
+<div align="center">
 
-MIT
+<img src="https://swcrafters.fra1.digitaloceanspaces.com/Assets/Logo_software_crafters.png" alt="Software Crafters" width="200"/>
+
+### Mentoría de [Software Crafters®](https://softwarecrafters.io/mentoria)
+
+**Arquitectura y Testing de Backend con Agentes de IA**
+
+</div>
+

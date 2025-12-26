@@ -77,7 +77,7 @@ Tests are colocated with the module they test:
 ```
 module/tests/
 ├── unit/           # Domain + UseCase tests (no dependencies)
-├── integration/    # Repository tests (real MongoDB)
+├── integration/    # Adapter tests (real MongoDB)
 └── e2e/            # HTTP endpoint tests (full stack)
 ```
 

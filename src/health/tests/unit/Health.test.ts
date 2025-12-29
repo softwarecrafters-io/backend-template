@@ -50,4 +50,35 @@ describe('The Health', () => {
 
     expect(health.uptime()).toBe(0);
   });
+
+  it('is equal to another Health with same id and timestamps', () => {
+    const id = Id.generate();
+    const health1 = Health.create(id, jan1At10am, jan1At10am5min);
+    const health2 = Health.create(id, jan1At10am, jan1At10am5min);
+
+    expect(health1.equals(health2)).toBe(true);
+  });
+
+  it('is not equal when ids differ', () => {
+    const health1 = Health.create(Id.generate(), jan1At10am, jan1At10am5min);
+    const health2 = Health.create(Id.generate(), jan1At10am, jan1At10am5min);
+
+    expect(health1.equals(health2)).toBe(false);
+  });
+
+  it('is not equal when createdAt differs', () => {
+    const id = Id.generate();
+    const health1 = Health.create(id, jan1At10am, jan1At10am5min);
+    const health2 = Health.create(id, jan1At10am5min, jan1At10am5min);
+
+    expect(health1.equals(health2)).toBe(false);
+  });
+
+  it('is not equal when lastCheckedAt differs', () => {
+    const id = Id.generate();
+    const health1 = Health.create(id, jan1At10am, jan1At10am);
+    const health2 = Health.create(id, jan1At10am, jan1At10am5min);
+
+    expect(health1.equals(health2)).toBe(false);
+  });
 });

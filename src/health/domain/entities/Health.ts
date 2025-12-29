@@ -26,6 +26,14 @@ export class Health {
     this.lastCheckedAt = now;
   }
 
+  equals(other: Health): boolean {
+    return (
+      this.id.equals(other.id) &&
+      this.createdAt.getTime() === other.createdAt.getTime() &&
+      this.lastCheckedAt.getTime() === other.lastCheckedAt.getTime()
+    );
+  }
+
   toPrimitives() {
     return {
       id: this.id.value,

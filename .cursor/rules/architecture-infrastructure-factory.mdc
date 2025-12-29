@@ -28,56 +28,55 @@ Use a simple Factory module to wire dependencies. No dependency injection contai
 ## Factory Structure
 
 ```typescript
-// src/factory.ts
+// src/shared/infrastructure/factory.ts
 
-// Cached instances
-let orderRepository: OrderRepository | null = null;
-let productRepository: ProductRepository | null = null;
-let mongoConnection: MongoClient | null = null;
+export class Factory {
+  // Cached instances
+  private static orderRepository: OrderRepository;
+  private static productRepository: ProductRepository;
+  private static mongoClient: MongoClient;
 
-// --- Infrastructure (cached) ---
+  // --- Infrastructure (cached) ---
 
-export function getMongoConnection(): MongoClient {
-  if (!mongoConnection) {
-    mongoConnection = new MongoClient(process.env.MONGO_URI);
+  static async connectToMongo(): Promise<void> {
+    this.mongoClient = await MongoClient.connect(process.env.MONGO_URI);
   }
-  return mongoConnection;
-}
 
-export function getOrderRepository(): OrderRepository {
-  if (!orderRepository) {
-    orderRepository = new MongoOrderRepository(getMongoConnection());
+  private static getOrderRepository(): OrderRepository {
+    if (!this.orderRepository) {
+      this.orderRepository = new MongoOrderRepository(this.mongoClient.db());
+    }
+    return this.orderRepository;
   }
-  return orderRepository;
-}
 
-export function getProductRepository(): ProductRepository {
-  if (!productRepository) {
-    productRepository = new MongoProductRepository(getMongoConnection());
+  private static getProductRepository(): ProductRepository {
+    if (!this.productRepository) {
+      this.productRepository = new MongoProductRepository(this.mongoClient.db());
+    }
+    return this.productRepository;
   }
-  return productRepository;
-}
 
-// --- Use Cases (new instance each time) ---
+  // --- Use Cases (new instance each time) ---
 
-export function createCreateOrderUseCase(): CreateOrderUseCase {
-  return new CreateOrderUseCase(
-    getOrderRepository(),
-    getProductRepository()
-  );
-}
+  static createCreateOrderUseCase(): CreateOrderUseCase {
+    return new CreateOrderUseCase(
+      this.getOrderRepository(),
+      this.getProductRepository()
+    );
+  }
 
-export function createGetOrderUseCase(): GetOrderUseCase {
-  return new GetOrderUseCase(getOrderRepository());
-}
+  static createGetOrderUseCase(): GetOrderUseCase {
+    return new GetOrderUseCase(this.getOrderRepository());
+  }
 
-// --- Controllers (new instance each time) ---
+  // --- Controllers (new instance each time) ---
 
-export function createOrderController(): OrderController {
-  return new OrderController(
-    createCreateOrderUseCase(),
-    createGetOrderUseCase()
-  );
+  static createOrderController(): OrderController {
+    return new OrderController(
+      this.createCreateOrderUseCase(),
+      this.createGetOrderUseCase()
+    );
+  }
 }
 ```
 

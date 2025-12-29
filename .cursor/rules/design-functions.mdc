@@ -41,6 +41,8 @@ alwaysApply: true
 
 15. **Constants close to usage**. Define constants inside the function that uses them
 
+16. **Use Maybe for optional values**. Never use `| undefined` or `| null` in return types. Use `Maybe<T>` from `shared/domain/Maybe` to represent presence/absence of values
+
 ```typescript
 // Constants:
 // ⚠️ WORSE

@@ -93,9 +93,11 @@ Repositories define contracts and include InMemory implementations in the same f
 
 ```typescript
 // src/invoices/domain/repositories/InvoiceRepository.ts
+import { Maybe } from '../../../shared/domain/Maybe';
+
 export interface InvoiceRepository {
   save(invoice: Invoice): Promise<void>;
-  findById(id: Id): Promise<Invoice | undefined>;
+  findById(id: Id): Promise<Maybe<Invoice>>;
   findByCustomer(customerId: Id): Promise<Invoice[]>;
 }
 
@@ -128,8 +130,8 @@ export class MongoInvoiceRepository implements InvoiceRepository {
     // MongoDB implementation
   }
   
-  async findById(id: Id): Promise<Invoice | undefined> {
-    // MongoDB implementation
+  async findById(id: Id): Promise<Maybe<Invoice>> {
+    // MongoDB implementation - use Maybe.fromNullable()
   }
 
   async findByCustomer(customerId: Id): Promise<Invoice[]> {

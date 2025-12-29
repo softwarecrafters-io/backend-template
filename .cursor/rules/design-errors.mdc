@@ -135,19 +135,19 @@ throw DomainError.createNotFound(
 - Validation failures
 
 ### ❌ Don't throw for:
-- Optional values (return undefined)
+- Optional values (return `Maybe.none()`)
 - Expected empty results (return empty array)
 
 ```typescript
 // ✅ Throw - entity must exist for operation
 const order = await this.orderRepository.findById(orderId);
-if (!order) {
+if (order.isNone()) {
   throw DomainError.createNotFound(`Order ${orderId} not found`);
 }
 
-// ✅ Return null/undefined - querying is not an error
-async findById(id: Id): Promise<Order | undefined> {
-  return this.orders.get(id.value);
+// ✅ Return Maybe - querying is not an error
+async findById(id: Id): Promise<Maybe<Order>> {
+  return Maybe.fromNullable(this.orders.get(id.value));
 }
 
 // ✅ Return empty array - no results is valid

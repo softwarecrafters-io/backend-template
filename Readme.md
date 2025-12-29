@@ -43,6 +43,14 @@ src/
     └── infrastructure/          # Factory, server, adapters
 ```
 
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `3000` | Server port |
+| `MONGO_URI` | - | MongoDB connection string (required) |
+| `LOG_LEVEL` | `info` | Pino log level (debug, info, warn, error, silent) |
+
 ## Quick Start
 
 Prerequisites: Node.js 24+, MongoDB
@@ -56,6 +64,13 @@ cp .env.example .env
 
 # Run (development)
 npm start
+```
+
+## Docker
+
+```bash
+docker build -t backend-template .
+docker run -p 3000:3000 -e MONGO_URI=mongodb://host.docker.internal:27017/app backend-template
 ```
 
 ## Scripts
@@ -80,6 +95,21 @@ module/tests/
 ├── integration/    # Adapter tests (real MongoDB)
 └── e2e/            # HTTP endpoint tests (full stack)
 ```
+
+## Domain Utilities
+
+- **Maybe\<T\>** - Monadic type for optional values (replaces `| undefined`)
+- **DomainError** - Single error class with factory methods (`createNotFound`, `createValidation`)
+- **Id** - Value object for entity identifiers
+
+## Development Rules
+
+Architecture and coding standards are defined in `.cursor/rules/`. Key principles:
+
+- Hexagonal architecture with vertical slicing
+- TDD with inside-out approach
+- No mocks policy in tests
+- Maybe instead of `| undefined`
 
 ## License
 
